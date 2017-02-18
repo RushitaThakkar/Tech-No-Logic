@@ -1,0 +1,193 @@
+boxImage = imread('apple1.jpeg');
+boxImage=rgb2gray(boxImage);
+figure;
+% imshow(boxImage);
+title('Image of a Box');
+sceneImage = imread('frst.jpg');
+sceneImage=rgb2gray(sceneImage);
+figure;
+% imshow(sceneImage);
+title('Image of a Cluttered Scene');
+boxPoints = detectSURFFeatures(boxImage);
+scenePoints = detectSURFFeatures(sceneImage);
+figure;
+% imshow(boxImage);
+title('100 Strongest Feature Points from Box Image');
+hold on;
+plot(selectStrongest(boxPoints, 100));
+figure;
+% imshow(sceneImage);
+title('300 Strongest Feature Points from Scene Image');
+hold on;
+plot(selectStrongest(scenePoints, 300));
+[boxFeatures, boxPoints] = extractFeatures(boxImage, boxPoints);
+[sceneFeatures, scenePoints] = extractFeatures(sceneImage, scenePoints);
+boxPairs = matchFeatures(boxFeatures, sceneFeatures);
+matchedBoxPoints = boxPoints(boxPairs(:, 1), :);
+matchedScenePoints = scenePoints(boxPairs(:, 2), :);
+figure;
+showMatchedFeatures(boxImage, sceneImage, matchedBoxPoints, ...
+    matchedScenePoints, 'montage');
+title('Putatively Matched Points (Including Outliers)');
+[tform, inlierBoxPoints, inlierScenePoints] = ...
+    estimateGeometricTransform(matchedBoxPoints, matchedScenePoints, 'affine');
+figure;
+showMatchedFeatures(boxImage, sceneImage, inlierBoxPoints, ...
+    inlierScenePoints, 'montage');
+title('Matched Points (Inliers Only)');
+boxPolygon = [1, 1;...                           % top-left
+        size(boxImage, 2), 1;...                 % top-right
+        size(boxImage, 2), size(boxImage, 1);... % bottom-right
+        1, size(boxImage, 1);...                 % bottom-left
+        1, 1];                   % top-left again to close the polygon
+    
+    newBoxPolygon = transformPointsForward(tform, boxPolygon);
+ figure;
+% imshow(sceneImage);
+hold on;
+line(newBoxPolygon(:, 1), newBoxPolygon(:, 2), 'Color', 'y');
+
+srcFiles = dir('C:\Desktop\*.jpeg');
+
+for i = 1 : length(srcFiles)
+  filename = strcat('C:\Desktop\*.jpeg',srcFiles(i).name);
+  I = dicomread(filename);
+  figure, imshow(I);
+title('Detected Box');
+fiImage=rgb2gray(filename);
+figure;
+imshow(fiImage);
+title('Image of an food');
+foodPoints = detectSURFFeatures(fiImage);
+figure;
+% imshow(bananaImage);
+hold on;
+plot(selectStrongest(foodPoints, 100));
+title('100 Strongest Feature Points from food Image');
+[foodFeatures, foodPoints] = extractFeatures(fiImage, foodPoints);
+foodPairs = matchFeatures(foodFeatures, sceneFeatures, 'MaxRatio', 0.9);
+matchedfoodPoints = foodPoints(foodPairs(:, 1), :);
+matchedScenePoints = scenePoints(foodPairs(:, 2), :);
+figure
+showMatchedFeatures(fiImage, sceneImage, matchedfoodPoints, ...
+    matchedScenePoints, 'montage');
+title('Putatively Matched Points (Including Outliers)');
+
+[tform, inlierfoodPoints, inlierScenePoints] = ...
+    estimateGeometricTransform(matchedfoodPoints, matchedScenePoints, 'affine');
+figure;
+showMatchedFeatures(fiImage, sceneImage, inlierfoodPoints, ...
+    inlierScenePoints, 'montage');
+title('Matched Points (Inliers Only)');
+
+foodPolygon = [1, 1;...                                 % top-left
+        size(fiImage, 2), 1;...                       % top-right
+        size(fiImage, 2), size(fiImage, 1);...  % bottom-right
+        1, size(fiImage, 1);...                       % bottom-left
+        1,1];                         % top-left again to close the polygon
+
+newfoodPolygon = transformPointsForward(tform, foodPolygon);
+
+figure;
+% imshow(sceneImage);
+hold on;
+line(newBoxPolygon(:, 1), newBoxPolygon(:, 2), 'Color', 'y');
+line(newfoodPolygon(:, 1), newfoodPolygon(:, 2), 'Color', 'g');
+title('Detected food and Box');
+endboxImage = imread('apple1.jpeg');
+boxImage=rgb2gray(boxImage);
+figure;
+% imshow(boxImage);
+title('Image of a Box');
+sceneImage = imread('frst.jpg');
+sceneImage=rgb2gray(sceneImage);
+figure;
+% imshow(sceneImage);
+title('Image of a Cluttered Scene');
+boxPoints = detectSURFFeatures(boxImage);
+scenePoints = detectSURFFeatures(sceneImage);
+figure;
+% imshow(boxImage);
+title('100 Strongest Feature Points from Box Image');
+hold on;
+plot(selectStrongest(boxPoints, 100));
+figure;
+% imshow(sceneImage);
+title('300 Strongest Feature Points from Scene Image');
+hold on;
+plot(selectStrongest(scenePoints, 300));
+[boxFeatures, boxPoints] = extractFeatures(boxImage, boxPoints);
+[sceneFeatures, scenePoints] = extractFeatures(sceneImage, scenePoints);
+boxPairs = matchFeatures(boxFeatures, sceneFeatures);
+matchedBoxPoints = boxPoints(boxPairs(:, 1), :);
+matchedScenePoints = scenePoints(boxPairs(:, 2), :);
+figure;
+showMatchedFeatures(boxImage, sceneImage, matchedBoxPoints, ...
+    matchedScenePoints, 'montage');
+title('Putatively Matched Points (Including Outliers)');
+[tform, inlierBoxPoints, inlierScenePoints] = ...
+    estimateGeometricTransform(matchedBoxPoints, matchedScenePoints, 'affine');
+figure;
+showMatchedFeatures(boxImage, sceneImage, inlierBoxPoints, ...
+    inlierScenePoints, 'montage');
+title('Matched Points (Inliers Only)');
+boxPolygon = [1, 1;...                           % top-left
+        size(boxImage, 2), 1;...                 % top-right
+        size(boxImage, 2), size(boxImage, 1);... % bottom-right
+        1, size(boxImage, 1);...                 % bottom-left
+        1, 1];                   % top-left again to close the polygon
+    
+    newBoxPolygon = transformPointsForward(tform, boxPolygon);
+ figure;
+% imshow(sceneImage);
+hold on;
+line(newBoxPolygon(:, 1), newBoxPolygon(:, 2), 'Color', 'y');
+
+srcFiles = dir('C:\Desktop\*.jpeg');
+
+for i = 1 : length(srcFiles)
+  filename = strcat('C:\Desktop\*.jpeg',srcFiles(i).name);
+  I = dicomread(filename);
+  figure, imshow(I);
+title('Detected Box');
+fiImage=rgb2gray(filename);
+figure;
+imshow(fiImage);
+title('Image of an food');
+foodPoints = detectSURFFeatures(fiImage);
+figure;
+% imshow(bananaImage);
+hold on;
+plot(selectStrongest(foodPoints, 100));
+title('100 Strongest Feature Points from food Image');
+[foodFeatures, foodPoints] = extractFeatures(fiImage, foodPoints);
+foodPairs = matchFeatures(foodFeatures, sceneFeatures, 'MaxRatio', 0.9);
+matchedfoodPoints = foodPoints(foodPairs(:, 1), :);
+matchedScenePoints = scenePoints(foodPairs(:, 2), :);
+figure
+showMatchedFeatures(fiImage, sceneImage, matchedfoodPoints, ...
+    matchedScenePoints, 'montage');
+title('Putatively Matched Points (Including Outliers)');
+
+[tform, inlierfoodPoints, inlierScenePoints] = ...
+    estimateGeometricTransform(matchedfoodPoints, matchedScenePoints, 'affine');
+figure;
+showMatchedFeatures(fiImage, sceneImage, inlierfoodPoints, ...
+    inlierScenePoints, 'montage');
+title('Matched Points (Inliers Only)');
+
+foodPolygon = [1, 1;...                                 % top-left
+        size(fiImage, 2), 1;...                       % top-right
+        size(fiImage, 2), size(fiImage, 1);...  % bottom-right
+        1, size(fiImage, 1);...                       % bottom-left
+        1,1];                         % top-left again to close the polygon
+
+newfoodPolygon = transformPointsForward(tform, foodPolygon);
+
+figure;
+% imshow(sceneImage);
+hold on;
+line(newBoxPolygon(:, 1), newBoxPolygon(:, 2), 'Color', 'y');
+line(newfoodPolygon(:, 1), newfoodPolygon(:, 2), 'Color', 'g');
+title('Detected food and Box');
+end
